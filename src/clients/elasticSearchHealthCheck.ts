@@ -52,7 +52,7 @@ const elasticSearchHealthCheckResourceConfig: IConfig = config.get(
 export class ElasticSearchHealthCheck {
   constructor(protected request = new HTTPUtil.Request()) {}
 
-  public fetchCpuUsage = async (): Promise<UsageGraph> => {
+  public async fetchCpuUsage(): Promise<UsageGraph> {
     try {
       const response = await this.request.get<UsageGraphResponse>(
         `${elasticSearchHealthCheckResourceConfig.get(
@@ -73,7 +73,7 @@ export class ElasticSearchHealthCheck {
     }
   };
 
-  public fetchMemoryUsage = async (): Promise<UsageGraph> => {
+  public async fetchMemoryUsage(): Promise<UsageGraph> {
     try {
       const response = await this.request.get<UsageGraphResponse>(
         `${elasticSearchHealthCheckResourceConfig.get(
@@ -94,7 +94,7 @@ export class ElasticSearchHealthCheck {
     }
   };
 
-  public fetchClusterStatus = async (): Promise<ClusterStatus> => {
+  public async fetchClusterStatus(): Promise<ClusterStatus> {
     try {
       const response = await this.request.get<ClusterStatusResponse>(
         `${elasticSearchHealthCheckResourceConfig.get(

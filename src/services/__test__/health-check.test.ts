@@ -8,21 +8,24 @@ import { HealthCheck } from '@src/services/health-check';
 
 jest.mock('@src/clients/elasticSearchHealthCheck');
 
-describe('Forecast Service', () => {
+describe('Health Check Service', () => {
+  const mockedElasticSearchHealthCheck =
+    new ElasticSearchHealthCheck() as jest.Mocked<ElasticSearchHealthCheck>;
+
   it('should return health metrics', async () => {
-    ElasticSearchHealthCheck.prototype.fetchCpuUsage = jest
-      .fn()
-      .mockResolvedValue(elasticSearchHealthCheckCpuUsageFixture);
+    mockedElasticSearchHealthCheck.fetchCpuUsage.mockResolvedValue(
+      elasticSearchHealthCheckCpuUsageFixture
+    );
 
-    ElasticSearchHealthCheck.prototype.fetchMemoryUsage = jest
-      .fn()
-      .mockResolvedValue(elasticSearchHealthCheckMemoryUsageFixture);
+    mockedElasticSearchHealthCheck.fetchMemoryUsage.mockResolvedValue(
+      elasticSearchHealthCheckMemoryUsageFixture
+    );
 
-    ElasticSearchHealthCheck.prototype.fetchClusterStatus = jest
-      .fn()
-      .mockResolvedValue(elasticSearchHealthCheckClusterStatusInfoFixture);
+    mockedElasticSearchHealthCheck.fetchClusterStatus.mockResolvedValue(
+      elasticSearchHealthCheckClusterStatusInfoFixture
+    );
 
-    const healthCheck = new HealthCheck(new ElasticSearchHealthCheck());
+    const healthCheck = new HealthCheck(mockedElasticSearchHealthCheck);
 
     const healthMetrics = await healthCheck.getHealthMetrics();
 
