@@ -1,5 +1,5 @@
-import { AxiosStatic } from 'axios';
 import { InternalError } from '@src/utils/errors/internal-error';
+import * as HTTPUtil from '@src/utils/request';
 
 import config, { IConfig } from 'config';
 
@@ -50,7 +50,7 @@ const elasticSearchHealthCheckResourceConfig: IConfig = config.get(
 );
 
 export class ElasticSearchHealthCheck {
-  constructor(protected request: AxiosStatic) {}
+  constructor(protected request = new HTTPUtil.Request()) {}
 
   public fetchCpuUsage = async (): Promise<UsageGraph> => {
     try {
@@ -61,7 +61,10 @@ export class ElasticSearchHealthCheck {
       );
       return this.normalizeUsageGraphResponse(response.data);
     } catch (e) {
-      if (e.response && e.response.status) {
+      /**
+       * This is handling the Axios erros specifically
+       */
+      if (HTTPUtil.Request.isRequestError(e)) {
         throw new ElasticSearchHealthCheckResponseError(
           `Error ${JSON.stringify(e.response.data)} Code: ${e.response.status}`
         );
@@ -79,7 +82,10 @@ export class ElasticSearchHealthCheck {
       );
       return this.normalizeUsageGraphResponse(response.data);
     } catch (e) {
-      if (e.response && e.response.status) {
+      /**
+       * This is handling the Axios erros specifically
+       */
+      if (HTTPUtil.Request.isRequestError(e)) {
         throw new ElasticSearchHealthCheckResponseError(
           `Error ${JSON.stringify(e.response.data)} Code: ${e.response.status}`
         );
@@ -97,7 +103,10 @@ export class ElasticSearchHealthCheck {
       );
       return this.normalizeClusterStatusResponse(response.data);
     } catch (e) {
-      if (e.response && e.response.status) {
+      /**
+       * This is handling the Axios erros specifically
+       */
+      if (HTTPUtil.Request.isRequestError(e)) {
         throw new ElasticSearchHealthCheckResponseError(
           `Error ${JSON.stringify(e.response.data)} Code: ${e.response.status}`
         );
