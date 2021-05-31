@@ -10,9 +10,7 @@ export class HealthCheckRoutes {
   }
 
   private buildRoutes = (): void => {
-    this.router.get('/cpu-usage', this.controller.getCpuUsage);
-    this.router.get('/memory-usage', this.controller.getMemoryUsage);
-    this.router.get('/cluster-status', this.controller.getClusterStatus);
+    this.router.get('/', this.controller.index);
   };
 }
 

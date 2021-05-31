@@ -57,7 +57,7 @@ export class ElasticSearchHealthCheck {
       const response = await this.request.get<UsageGraphResponse>(
         `${elasticSearchHealthCheckResourceConfig.get(
           'apiUrl'
-        )}/b1bc5162-7cf2-4 599-b1f5-e3bd58fcf07f`
+        )}/b1bc5162-7cf2-4599-b1f5-e3bd58fcf07f`
       );
       return this.normalizeUsageGraphResponse(response.data);
     } catch (e) {
