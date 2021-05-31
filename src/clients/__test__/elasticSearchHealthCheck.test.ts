@@ -11,7 +11,7 @@ describe('ElasticSearch health check client', () => {
   it('should return the normalized cpu usage data from the ElasticSearch health check service', async () => {
     axios.get = jest
       .fn()
-      .mockResolvedValue(elasticSearchHealthCheckCpuUsageFixture);
+      .mockResolvedValue({ data: elasticSearchHealthCheckCpuUsageFixture });
 
     const elasticSearch = new ElasticSearchHealthCheck(axios);
     const response = await elasticSearch.fetchCpuUsage();
@@ -22,7 +22,7 @@ describe('ElasticSearch health check client', () => {
   it('should return the normalized memory usage data from the ElasticSearch health check service', async () => {
     axios.get = jest
       .fn()
-      .mockResolvedValue(elasticSearchHealthCheckMemoryUsageFixture);
+      .mockResolvedValue({ data: elasticSearchHealthCheckMemoryUsageFixture });
 
     const elasticSearch = new ElasticSearchHealthCheck(axios);
     const response = await elasticSearch.fetchMemoryUsage();
@@ -31,9 +31,9 @@ describe('ElasticSearch health check client', () => {
   });
 
   it('should return the normalized cluster status info from the ElasticSearch health check service', async () => {
-    axios.get = jest
-      .fn()
-      .mockResolvedValue(elasticSearchHealthCheckClusterStatusInfoFixture);
+    axios.get = jest.fn().mockResolvedValue({
+      data: elasticSearchHealthCheckClusterStatusInfoFixture,
+    });
 
     const elasticSearch = new ElasticSearchHealthCheck(axios);
     const response = await elasticSearch.fetchClusterStatus();

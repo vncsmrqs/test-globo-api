@@ -7,19 +7,77 @@ const fetchMemoryUsageDataEndpoint =
 const fetchClusterStatusInfoEndpoint =
   'https://run.mocky.io/v3/cab2791c-7c85-4461-b95c-86bc1a12dc72';
 
+export interface UsageGraphResponse {
+  labels: string[];
+  data: number[];
+}
+
+export interface ClusterStatusResponse {
+  status: string;
+}
+
+export interface UsageGraph {
+  labels: string[];
+  data: number[];
+}
+
+export interface ClusterStatus {
+  status: string;
+}
+
 export class ElasticSearchHealthCheck {
   constructor(protected request: AxiosStatic) {}
 
-  public fetchCpuUsage = async (): Promise<{}> => {
-    return this.request.get(fetchCpuUsageDataEndpoint);
+  public fetchCpuUsage = async (): Promise<UsageGraph> => {
+    const response = await this.request.get<UsageGraphResponse>(
+      fetchCpuUsageDataEndpoint
+    );
+    return this.normalizeUsageGraphResponse(response.data);
   };
 
-  public fetchMemoryUsage = async (): Promise<{}> => {
-    return this.request.get(fetchMemoryUsageDataEndpoint);
+  public fetchMemoryUsage = async (): Promise<UsageGraph> => {
+    const response = await this.request.get<UsageGraphResponse>(
+      fetchMemoryUsageDataEndpoint
+    );
+    return this.normalizeUsageGraphResponse(response.data);
   };
 
-  public fetchClusterStatus = async (): Promise<{}> => {
-    return this.request.get(fetchClusterStatusInfoEndpoint);
+  public fetchClusterStatus = async (): Promise<ClusterStatus> => {
+    const response = await this.request.get<ClusterStatusResponse>(
+      fetchClusterStatusInfoEndpoint
+    );
+    return this.normalizeClusterStatusResponse(response.data);
+  };
+
+  private normalizeUsageGraphResponse = (
+    response: UsageGraphResponse
+  ): UsageGraph => {
+    if (!this.isValidUsageGraph(response)) {
+      throw Error();
+    }
+    return {
+      labels: response.labels || [],
+      data: response.data || [],
+    };
+  };
+
+  private isValidUsageGraph = (graph: Partial<UsageGraph>) => {
+    return !!(graph.labels && graph.data);
+  };
+
+  private normalizeClusterStatusResponse = (
+    response: ClusterStatusResponse
+  ): ClusterStatus => {
+    if (!this.isValidClusterStatus(response)) {
+      throw Error();
+    }
+    return {
+      status: response.status,
+    };
+  };
+
+  private isValidClusterStatus = (graph: Partial<ClusterStatus>) => {
+    return !!graph.status;
   };
 }
 
