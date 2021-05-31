@@ -1,4 +1,6 @@
 import { AxiosStatic } from 'axios';
+import {InternalError} from "@src/utils/errors/internal-error";
+import {UserInfo} from "os";
 
 const fetchCpuUsageDataEndpoint =
   'https://run.mocky.io/v3/b1bc5162-7cf2-4 599-b1f5-e3bd58fcf07f';
@@ -25,39 +27,81 @@ export interface ClusterStatus {
   status: string;
 }
 
+export class ClientRequestError extends InternalError {
+  constructor(message: string) {
+    const internalMessage = 'Unexpected error when trying to communicate to ElasticSearch health check service';
+    super(`${internalMessage}${message ? ': ' + message : ''}`);
+  }
+}
+
+export class InvalidElasticSearchHealthCheckResponseError extends InternalError {
+  constructor(message: string = '') {
+    const internalMessage = 'Invalid response data returned by the ElasticSearch health check service';
+    super(`${internalMessage}${message ? ': ' + message : ''}`);
+  }
+}
+
+export class ElasticSearchHealthCheckResponseError extends InternalError {
+  constructor(message: string = '') {
+    const internalMessage = 'Unexpected error returned by the ElasticSearch health check service';
+    super(`${internalMessage}${message ? ': ' + message : ''}`);
+  }
+}
+
 export class ElasticSearchHealthCheck {
   constructor(protected request: AxiosStatic) {}
 
   public fetchCpuUsage = async (): Promise<UsageGraph> => {
-    const response = await this.request.get<UsageGraphResponse>(
-      fetchCpuUsageDataEndpoint
-    );
-    return this.normalizeUsageGraphResponse(response.data);
+    try {
+      const response = await this.request.get<UsageGraphResponse>(
+        fetchCpuUsageDataEndpoint
+      );
+      return this.normalizeUsageGraphResponse(response.data);
+    } catch (e) {
+      if (e.response && e.response.status) {
+        throw new ElasticSearchHealthCheckResponseError(`Error ${JSON.stringify(e.response.data)} Code: ${e.response.status}`);
+      }
+      throw new ClientRequestError(e.message);
+    }
   };
 
   public fetchMemoryUsage = async (): Promise<UsageGraph> => {
+    try {
     const response = await this.request.get<UsageGraphResponse>(
       fetchMemoryUsageDataEndpoint
     );
     return this.normalizeUsageGraphResponse(response.data);
+    } catch (e) {
+      if (e.response && e.response.status) {
+        throw new ElasticSearchHealthCheckResponseError(`Error ${JSON.stringify(e.response.data)} Code: ${e.response.status}`);
+      }
+      throw new ClientRequestError(e.message);
+    }
   };
 
   public fetchClusterStatus = async (): Promise<ClusterStatus> => {
-    const response = await this.request.get<ClusterStatusResponse>(
-      fetchClusterStatusInfoEndpoint
-    );
-    return this.normalizeClusterStatusResponse(response.data);
+    try {
+      const response = await this.request.get<ClusterStatusResponse>(
+        fetchClusterStatusInfoEndpoint
+      );
+      return this.normalizeClusterStatusResponse(response.data);
+    } catch (e) {
+      if (e.response && e.response.status) {
+        throw new ElasticSearchHealthCheckResponseError(`Error ${JSON.stringify(e.response.data)} Code: ${e.response.status}`);
+      }
+      throw new ClientRequestError(e.message);
+    }
   };
 
   private normalizeUsageGraphResponse = (
     response: UsageGraphResponse
   ): UsageGraph => {
     if (!this.isValidUsageGraph(response)) {
-      throw Error();
+      throw new InvalidElasticSearchHealthCheckResponseError();
     }
     return {
-      labels: response.labels || [],
-      data: response.data || [],
+      labels: response.labels,
+      data: response.data,
     };
   };
 
@@ -69,7 +113,7 @@ export class ElasticSearchHealthCheck {
     response: ClusterStatusResponse
   ): ClusterStatus => {
     if (!this.isValidClusterStatus(response)) {
-      throw Error();
+      throw new InvalidElasticSearchHealthCheckResponseError();
     }
     return {
       status: response.status,
