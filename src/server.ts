@@ -1,5 +1,5 @@
 import './utils/module-alias';
-import express, { Application } from "express";
+import express, { Application } from 'express';
 
 import { HealthCheckRoutes } from '@src/routes/health-check.routes';
 
@@ -29,6 +29,6 @@ export class SetupServer {
 
   private setupRoutes() {
     const healthCheckRoutes = new HealthCheckRoutes();
-    this.app.use("/health-check", healthCheckRoutes.router);
+    this.app.use('/health-check', healthCheckRoutes.router);
   }
 }
