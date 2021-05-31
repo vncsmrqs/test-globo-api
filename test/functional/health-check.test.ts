@@ -1,14 +1,12 @@
-import supertest from 'supertest';
-
-const getCpuUsageData = 'https://run.mocky.io/v3/b1bc5162-7cf2-4 599-b1f5-e3bd58fcf07f';
-const getMemoryUsageData = 'https://run.mocky.io/v3/d23c3262-967e-4567-b7f6-2fd263748811';
-const GetClusterStatusInfo = 'https://run.mocky.io/v3/cab2791c-7c85-4461-b95c-86bc1a12dc72';
+// const getCpuUsageData = 'https://run.mocky.io/v3/b1bc5162-7cf2-4 599-b1f5-e3bd58fcf07f';
+// const getMemoryUsageData = 'https://run.mocky.io/v3/d23c3262-967e-4567-b7f6-2fd263748811';
+// const GetClusterStatusInfo = 'https://run.mocky.io/v3/cab2791c-7c85-4461-b95c-86bc1a12dc72';
 
 describe('ElasticSearch health check functional tests', () => {
   it('should return a cpu usage data', async () => {
-    const { body, status } = await supertest(app).get('/health-check/cpu-usage');
+    const { body, status } = await global.testRequest.get('/health-check/cpu-usage');
     expect(status).toBe(200);
-    expect(body).toBe({
+    expect(body).toEqual({
       "labels": [
         "13:24",
         "13:29",
@@ -40,9 +38,9 @@ describe('ElasticSearch health check functional tests', () => {
     });
   });
   it('should return a memory usage data', async () => {
-    const { body, status } = await supertest(app).get('/health-check/memory-usage');
+    const { body, status } = await global.testRequest.get('/health-check/memory-usage');
     expect(status).toBe(200);
-    expect(body).toBe({
+    expect(body).toEqual({
       "labels": [
         "13:24",
         "13:29",
@@ -74,9 +72,9 @@ describe('ElasticSearch health check functional tests', () => {
     });
   });
   it('should return a cluster status info', async () => {
-    const { body, status } = await supertest(app).get('/health-check/cluster-status');
+    const { body, status } = await global.testRequest.get('/health-check/cluster-status');
     expect(status).toBe(200);
-    expect(body).toBe({
+    expect(body).toEqual({
       "status": "green"
     });
   });
