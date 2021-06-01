@@ -9,6 +9,9 @@
       "ElasticSearchHealthCheck": {
         "apiUrl": "https://run.mocky.io/v3"
       }
+    },
+    "cors": {
+      "allowedOrigins": ["http://localhost:8080"]
     }
   }
 }

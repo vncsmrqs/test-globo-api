@@ -1,5 +1,7 @@
 import './utils/module-alias';
 import express, { Application } from 'express';
+import cors from 'cors';
+import config from 'config';
 
 import { HealthCheckRoutes } from '@src/routes/health-check.routes';
 import AuthRoutes from '@src/routes/auth';
@@ -30,6 +32,7 @@ export class SetupServer {
   }
 
   private setupExpress(): void {
+    this.setupCors();
     this.app.use(express.json());
   }
 
@@ -40,5 +43,13 @@ export class SetupServer {
     this.app.use('/health-check', healthCheckRoutes.router);
     this.app.use('/auth', authRoutes.router);
     this.app.use('/users', usersRoutes.router);
+  }
+
+  private setupCors() {
+    const allowedOrigins = config.get<Array<string>>('App.cors.allowedOrigins');
+    const options: cors.CorsOptions = {
+      origin: allowedOrigins
+    };
+    this.app.use(cors(options));
   }
 }
