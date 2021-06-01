@@ -1,5 +1,5 @@
 import { InternalError } from '@src/utils/errors/internal-error';
-import {User} from "@src/models/user";
+import { User, comparePasswords } from '@src/models/user';
 
 export interface AuthenticatedUser {
   email: string;
@@ -22,6 +22,12 @@ export class Auth {
     const user = User.findByEmail(email);
 
     if (!user) {
+      throw new InvalidCredentialsError();
+    }
+
+    const validPassword = await comparePasswords(password, user.password);
+
+    if (!validPassword) {
       throw new InvalidCredentialsError();
     }
 

@@ -3,7 +3,7 @@ import express, { Application } from 'express';
 
 import { HealthCheckRoutes } from '@src/routes/health-check.routes';
 import AuthRoutes from '@src/routes/auth';
-import UsersRoutes from "@src/routes/users";
+import UsersRoutes from '@src/routes/users';
 
 export class SetupServer {
   readonly port;

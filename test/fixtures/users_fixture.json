@@ -1,12 +1,12 @@
 [
   {
     "email": "usuariocomum@teste.com.br",
-    "password": "???",
+    "password": "$2b$10$beN3esusjPY7Hgcxbi5lSe5nnnhjhLbnyTw/wv8P.WB/FpehgGvvK",
     "accessLevel": "funcionario"
   },
   {
     "email": "usuarioadm@teste.com.br",
-    "password": "???",
+    "password": "$2b$10$beN3esusjPY7Hgcxbi5lSe5nnnhjhLbnyTw/wv8P.WB/FpehgGvvK",
     "accessLevel": "administrador"
   }
 ]
