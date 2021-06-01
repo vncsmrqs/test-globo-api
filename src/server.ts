@@ -20,8 +20,12 @@ export class SetupServer {
   public init(): void {
     this.setupExpress();
     this.setupRoutes();
+  }
 
-    this.app.listen(this.port);
+  public start(): void {
+    this.app.listen(this.port, () => {
+      console.info('Server listening on port: ' + this.port);
+    });
   }
 
   private setupExpress(): void {
