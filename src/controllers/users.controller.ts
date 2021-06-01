@@ -8,15 +8,13 @@ export class UsersController {
         email: user.email,
         accessLevel: user.accessLevel,
       }));
-      res.json(users).status(200);
+      res.status(200).json(users);
     } catch (e) {
-      res
-        .json({
-          message: e.message,
-          name: e.name,
-          code: e.code,
-        })
-        .status(e.code);
+      res.status(e.code).json({
+        message: e.message,
+        name: e.name,
+        code: e.code,
+      });
     }
   };
 }

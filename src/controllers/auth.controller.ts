@@ -6,17 +6,15 @@ export class AuthController {
     try {
       const { email, password } = req.body;
 
-      const authenticatedUser = await AuthService.authenticate(email, password);
+      const authToken = await AuthService.authenticate(email, password);
 
-      res.json(authenticatedUser).status(200);
+      res.status(200).json(authToken);
     } catch (e) {
-      res
-        .json({
-          message: e.message,
-          name: e.name,
-          code: e.code,
-        })
-        .status(e.code);
+      res.status(e.code).json({
+        message: e.message,
+        name: e.name,
+        code: e.code,
+      });
     }
   };
 }

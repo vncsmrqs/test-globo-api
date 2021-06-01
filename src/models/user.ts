@@ -12,6 +12,8 @@ export class User {
   }
 
   public static findByEmail(email: string): IUser | undefined {
-    return usersFixtures.find((user) => user.email === email);
+    return usersFixtures.find((user) => {
+      return user.email === email;
+    });
   }
 }

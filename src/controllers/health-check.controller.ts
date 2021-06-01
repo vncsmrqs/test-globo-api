@@ -7,15 +7,13 @@ export class HealthCheckController {
       const healthCheck = new HealthCheck();
       const healthMetrics: HealthMetrics = await healthCheck.getHealthMetrics();
 
-      res.json(healthMetrics).status(200);
+      res.status(200).json(healthMetrics);
     } catch (e) {
-      res
-        .json({
-          message: e.message,
-          name: e.name,
-          code: e.code,
-        })
-        .status(e.code);
+      res.status(e.code).json({
+        message: e.message,
+        name: e.name,
+        code: e.code,
+      });
     }
   };
 }
