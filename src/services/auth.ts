@@ -1,10 +1,9 @@
 import { InternalError } from '@src/utils/errors/internal-error';
-
-import usersFixtures from '@test/fixtures/users_fixture.json';
+import {User} from "@src/models/user";
 
 export interface AuthenticatedUser {
   email: string;
-  nivel_acesso: string;
+  accessLevel: string;
 }
 
 export class InvalidCredentialsError extends InternalError {
@@ -20,17 +19,15 @@ export class Auth {
     email: string,
     password: string
   ): Promise<AuthenticatedUser> {
-    const authenticatedUser = usersFixtures.find(
-      (user) => user.email === email && user.senha === password
-    );
+    const user = User.findByEmail(email);
 
-    if (!authenticatedUser) {
+    if (!user) {
       throw new InvalidCredentialsError();
     }
 
     return {
-      email: authenticatedUser.email,
-      nivel_acesso: authenticatedUser.nivel_acesso,
+      email: user.email,
+      accessLevel: user.accessLevel,
     };
   }
 }

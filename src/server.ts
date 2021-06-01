@@ -3,10 +3,11 @@ import express, { Application } from 'express';
 
 import { HealthCheckRoutes } from '@src/routes/health-check.routes';
 import AuthRoutes from '@src/routes/auth';
+import UsersRoutes from "@src/routes/users";
 
 export class SetupServer {
-  private port;
-  private app: Application;
+  readonly port;
+  readonly app: Application;
 
   constructor(port = 3000) {
     this.port = port;
@@ -35,7 +36,9 @@ export class SetupServer {
   private setupRoutes() {
     const healthCheckRoutes = new HealthCheckRoutes();
     const authRoutes = new AuthRoutes();
+    const usersRoutes = new UsersRoutes();
     this.app.use('/health-check', healthCheckRoutes.router);
     this.app.use('/auth', authRoutes.router);
+    this.app.use('/users', usersRoutes.router);
   }
 }
