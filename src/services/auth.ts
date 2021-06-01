@@ -3,6 +3,8 @@ import { User } from '@src/models/user';
 import bcrypt from 'bcrypt';
 import jtw from 'jsonwebtoken';
 
+import config from 'config';
+
 export interface AuthenticatedUser {
   email: string;
   accessLevel: string;
@@ -64,8 +66,8 @@ export class AuthService {
   }
 
   public static generateToken(authenticatedUser: AuthenticatedUser): string {
-    return jtw.sign(authenticatedUser, 'test', {
-      expiresIn: 10000,
+    return jtw.sign(authenticatedUser, config.get('App.auth.secretKey'), {
+      expiresIn: config.get('App.auth.expiresIn'),
     });
   }
 }

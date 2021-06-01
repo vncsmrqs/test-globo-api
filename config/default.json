@@ -1,6 +1,10 @@
 {
   "App": {
     "port": 3000,
+    "auth": {
+      "secretKey": "some-key",
+      "expiresIn": 200000000
+    },
     "resources": {
       "ElasticSearchHealthCheck": {
         "apiUrl": "https://run.mocky.io/v3"
