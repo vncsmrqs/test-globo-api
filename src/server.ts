@@ -2,6 +2,7 @@ import './utils/module-alias';
 import express, { Application } from 'express';
 
 import { HealthCheckRoutes } from '@src/routes/health-check.routes';
+import AuthRoutes from '@src/routes/auth';
 
 export class SetupServer {
   private port;
@@ -29,6 +30,8 @@ export class SetupServer {
 
   private setupRoutes() {
     const healthCheckRoutes = new HealthCheckRoutes();
+    const authRoutes = new AuthRoutes();
     this.app.use('/health-check', healthCheckRoutes.router);
+    this.app.use('/auth', authRoutes.router);
   }
 }

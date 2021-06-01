@@ -71,7 +71,7 @@ export class ElasticSearchHealthCheck {
       }
       throw new ClientRequestError(e.message);
     }
-  };
+  }
 
   public async fetchMemoryUsage(): Promise<UsageGraph> {
     try {
@@ -92,7 +92,7 @@ export class ElasticSearchHealthCheck {
       }
       throw new ClientRequestError(e.message);
     }
-  };
+  }
 
   public async fetchClusterStatus(): Promise<ClusterStatus> {
     try {
@@ -113,7 +113,7 @@ export class ElasticSearchHealthCheck {
       }
       throw new ClientRequestError(e.message);
     }
-  };
+  }
 
   private normalizeUsageGraphResponse = (
     response: UsageGraphResponse

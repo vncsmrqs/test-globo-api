@@ -1,0 +1,12 @@
+[
+  {
+    "email": "usuariocomum@teste.com.br",
+    "senha": "???",
+    "nivel_acesso": "funcionario"
+  },
+  {
+    "email": "usuarioadm@teste.com.br",
+    "senha": "???",
+    "nivel_acesso": "administrador"
+  }
+]
