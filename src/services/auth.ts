@@ -1,5 +1,6 @@
 import { InternalError } from '@src/utils/errors/internal-error';
-import { User, comparePasswords } from '@src/models/user';
+import { User } from '@src/models/user';
+import bcrypt from 'bcrypt';
 
 export interface AuthenticatedUser {
   email: string;
@@ -14,7 +15,7 @@ export class InvalidCredentialsError extends InternalError {
   }
 }
 
-export class Auth {
+export class AuthService {
   public static async authenticate(
     email: string,
     password: string
@@ -25,7 +26,10 @@ export class Auth {
       throw new InvalidCredentialsError();
     }
 
-    const validPassword = await comparePasswords(password, user.password);
+    const validPassword = await AuthService.comparePasswords(
+      password,
+      user.password
+    );
 
     if (!validPassword) {
       throw new InvalidCredentialsError();
@@ -36,6 +40,20 @@ export class Auth {
       accessLevel: user.accessLevel,
     };
   }
+
+  public static async hashPassword(
+    password: string,
+    salt = 10
+  ): Promise<string> {
+    return await bcrypt.hash(password, salt);
+  }
+
+  public static async comparePasswords(
+    password: string,
+    hashedPassword: string
+  ): Promise<boolean> {
+    return await bcrypt.compare(password, hashedPassword);
+  }
 }
 
-export default Auth;
+export default AuthService;
